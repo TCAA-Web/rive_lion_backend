@@ -27,7 +27,7 @@ let isSad = false;
 
 // A user connects to the server (opens a socket)
 io.sockets.on("connection", function (socket) {
-  var hungerInterval = setInterval(() => {
+  socket.on("getStatus", () => {
     hungerLevel = hungerLevel - 0.5;
     if (hungerLevel < 80) {
       isSad = true;
@@ -35,8 +35,7 @@ io.sockets.on("connection", function (socket) {
       isSad = false;
     }
     io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
-    return () => clearInterval(hungerInterval);
-  }, 1000);
+  });
 
   // Server recieves a feed ping and updates health
   socket.on("feed", (data) => {
