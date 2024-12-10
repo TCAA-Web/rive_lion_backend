@@ -6,17 +6,17 @@ const PORT = 3000;
 // Create Express http server
 const server = http.createServer(app);
 
+// Server listens on port
+server.listen(PORT, () => {
+  console.log(`listening on *:${PORT}`);
+});
+
 // Initialize Socket IO on server
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
     origin: "https://iridescent-entremet-a17b07.netlify.app",
   },
-});
-
-// Server listens on port
-server.listen(PORT, () => {
-  console.log(`listening on *:${PORT}`);
 });
 
 // Initialize Animal Stats
