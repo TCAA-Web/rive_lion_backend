@@ -25,13 +25,15 @@ let isSad = false;
 
 // Start interval that ticks down health every 5 seconds and emit hungerLevel to clients
 setInterval(() => {
-  hungerLevel = hungerLevel - 0.5;
-  if (hungerLevel < 80) {
-    isSad = true;
-  } else {
-    isSad = false;
+  if (hungerLevel > 0) {
+    hungerLevel = hungerLevel - 0.5;
+    if (hungerLevel < 80) {
+      isSad = true;
+    } else {
+      isSad = false;
+    }
+    io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
   }
-  io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
 }, 5000);
 
 // A user connects to the server (opens a socket)
