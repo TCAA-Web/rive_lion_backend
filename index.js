@@ -24,19 +24,20 @@ let hungerLevel = 100;
 let isSad = false;
 
 // Start interval that ticks down health and emit hungerLevel to clients
-let hungerInterval = setInterval(() => {
-  hungerLevel = hungerLevel - 0.5;
-  if (hungerLevel < 80) {
-    isSad = true;
-  } else {
-    isSad = false;
-  }
-  io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
-  return () => clearInterval(hungerInterval);
-}, 1000);
 
 // A user connects to the server (opens a socket)
 io.sockets.on("connection", function (socket) {
+  var hungerInterval = setInterval(() => {
+    hungerLevel = hungerLevel - 0.5;
+    if (hungerLevel < 80) {
+      isSad = true;
+    } else {
+      isSad = false;
+    }
+    io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
+    return () => clearInterval(hungerInterval);
+  }, 1000);
+
   // Server recieves a feed ping and updates health
   socket.on("feed", (data) => {
     if (hungerLevel <= 90) {
@@ -46,5 +47,10 @@ io.sockets.on("connection", function (socket) {
     }
     console.log("Recieved feed ping: ", data);
     io.sockets.emit("feed", data);
+  });
+
+  // Removes the interval when user disconnects
+  socket.on("disconnect", () => {
+    clearInterval(hungerInterval);
   });
 });
