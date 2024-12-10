@@ -44,6 +44,6 @@ io.sockets.on("connection", function (socket) {
       hungerLevel = 100;
     }
     console.log("Recieved feed ping: ", data);
-    io.sockets.emit("feed", data);
+    io.sockets.emit("feed", { hunger: hungerLevel, isSad: isSad });
   });
 });
