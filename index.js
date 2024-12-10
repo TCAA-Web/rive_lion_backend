@@ -15,7 +15,7 @@ server.listen(PORT, () => {
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "https://rive-lion.netlify.app",
+    origin: "https://iridescent-entremet-a17b07.netlify.app",
   },
 });
 
@@ -24,19 +24,18 @@ let hungerLevel = 100;
 let isSad = false;
 
 // Start interval that ticks down health and emit hungerLevel to clients
+setInterval(() => {
+  hungerLevel = hungerLevel - 0.5;
+  if (hungerLevel < 80) {
+    isSad = true;
+  } else {
+    isSad = false;
+  }
+  io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
+}, 1000);
 
 // A user connects to the server (opens a socket)
 io.sockets.on("connection", function (socket) {
-  socket.on("getStatus", () => {
-    hungerLevel = hungerLevel - 0.5;
-    if (hungerLevel < 80) {
-      isSad = true;
-    } else {
-      isSad = false;
-    }
-    io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
-  });
-
   // Server recieves a feed ping and updates health
   socket.on("feed", (data) => {
     if (hungerLevel <= 90) {
