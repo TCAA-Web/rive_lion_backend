@@ -23,7 +23,7 @@ const io = new Server(server, {
 let hungerLevel = 100;
 let isSad = false;
 
-// Start interval that ticks down health and emit hungerLevel to clients
+// Start interval that ticks down health every 5 seconds and emit hungerLevel to clients
 setInterval(() => {
   hungerLevel = hungerLevel - 0.5;
   if (hungerLevel < 80) {
@@ -32,7 +32,7 @@ setInterval(() => {
     isSad = false;
   }
   io.sockets.emit("status", { hunger: hungerLevel, isSad: isSad });
-}, 1000);
+}, 5000);
 
 // A user connects to the server (opens a socket)
 io.sockets.on("connection", function (socket) {
