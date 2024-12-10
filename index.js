@@ -47,9 +47,4 @@ io.sockets.on("connection", function (socket) {
     console.log("Recieved feed ping: ", data);
     io.sockets.emit("feed", data);
   });
-
-  // Removes the interval when user disconnects
-  socket.on("disconnect", () => {
-    clearInterval(hungerInterval);
-  });
 });
