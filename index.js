@@ -23,7 +23,7 @@ const io = new Server(server, {
 let hungerLevel = 100;
 let isSad = false;
 
-// Start interval that ticks down health every 5 seconds and emit hungerLevel to clients
+// Start interval that ticks down health every 5 seconds and emits the current hungerLevel to all clients
 setInterval(() => {
   if (hungerLevel > 0) {
     hungerLevel = hungerLevel - 0.5;
